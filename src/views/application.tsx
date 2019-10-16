@@ -14,6 +14,7 @@ import {CanvasContext} from '../gl/canvas-context'
 import {Toolbar} from './toolbar'
 import {importJavaScriptSourceMapSymbolRemapper} from '../lib/js-source-map'
 import {Theme, withTheme} from './themes/theme'
+import {importSpeedscopeProfiles} from '../lib/file-format';
 
 const importModule = import('../import')
 
@@ -152,6 +153,14 @@ export type ApplicationProps = ApplicationState & {
 }
 
 export class Application extends StatelessComponent<ApplicationProps> {
+  componentWillMount() {
+    const initialProfile = (window as any)['initialProfile'] || undefined;
+    if(initialProfile) {
+        console.log('Loading initialProfile');
+        this.loadProfile(() => new Promise(resolve => setTimeout(() => resolve(importSpeedscopeProfiles(initialProfile)), 0)));
+    }
+  }
+
   private async loadProfile(loader: () => Promise<ProfileGroup | null>) {
     this.props.setLoading(true)
     await new Promise(resolve => setTimeout(resolve, 0))
