@@ -154,10 +154,18 @@ export type ApplicationProps = ApplicationState & {
 
 export class Application extends StatelessComponent<ApplicationProps> {
   componentWillMount() {
+      const self = this;
+      const loadInitialProfile = (initialProfile) => {
+        console.log('Loading initialProfile');
+        self.loadProfile(() => new Promise(resolve => setTimeout(() => resolve(importSpeedscopeProfiles(initialProfile)), 0)));
+      };
+
+      ;(window as any)['loadInitialProfile'] = loadInitialProfile;
+      console.log('window.loadInitialProfile set');
+
     const initialProfile = (window as any)['initialProfile'] || undefined;
     if(initialProfile) {
-        console.log('Loading initialProfile');
-        this.loadProfile(() => new Promise(resolve => setTimeout(() => resolve(importSpeedscopeProfiles(initialProfile)), 0)));
+        loadInitialProfile(initialProfile);
     }
   }
 

@@ -166,6 +166,17 @@
 </head>
 
 <body>
+  <script>
+    window.addEventListener('message', (e) => {
+      if(e.data.type = 'loadInitialProfile') {
+        if(window.loadInitialProfile) {
+          window.loadInitialProfile(e.data.profile);
+        } else {
+          window.initialProfile = e.data.profile;
+        }
+      }
+    });
+  </script>
   <script src="../src/speedscope.tsx"></script>
 </body>
 
